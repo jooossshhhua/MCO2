@@ -16,13 +16,10 @@ import com.google.firebase.database.FirebaseDatabase
 import android.content.Intent
 import android.graphics.Bitmap
 import android.provider.MediaStore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import java.io.ByteArrayOutputStream
-import java.util.UUID
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+
 
 class SpendingFormActivity : ComponentActivity() {
     companion object {
@@ -100,21 +97,33 @@ class SpendingFormActivity : ComponentActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
-            val imageView: ImageView = findViewById(R.id.imageView3)
+            val imageView: ImageView = findViewById(R.id.itemPic)
             imageView.setImageBitmap(imageBitmap)
         }
     }
+    private fun getCurrentDateAndDay(): Pair<String, String> {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+        val formattedDate = dateFormat.format(calendar.time)
+
+        val daysOfWeek = arrayOf("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
+        val dayOfWeek = daysOfWeek[calendar.get(Calendar.DAY_OF_WEEK) - 1]
+
+        return Pair(formattedDate, dayOfWeek)
+    }
 
     private fun collectData(): Map<String, Any> {
+        val (date, day) = getCurrentDateAndDay()
         val name = findViewById<EditText>(R.id.editTextText).text.toString()
         val amount = findViewById<EditText>(R.id.amountbudgetTv).text.toString()
         val category = findViewById<Spinner>(R.id.catSpinner).selectedItem.toString()
-
 
         return mapOf(
             "name" to name,
             "amount" to amount,
             "category" to category,
+            "date" to date,
+            "day" to day
         )
     }
 
