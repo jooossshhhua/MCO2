@@ -182,7 +182,7 @@
                 app:layout_constraintVertical_bias="0.615" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/dateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="June 21, 2024"
