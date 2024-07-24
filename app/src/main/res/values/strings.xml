@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">MCO2_S11
+    </string>
+    <string-array name="category_array">
+            <item>Food</item>
+            <item>Transportation</item>
+            <item>Miscellaneous</item>
+            <item>Utilities</item>
+            <item>Personal Care</item>
+            <item>Entertainment</item>
+    </string-array>
+
+</resources>

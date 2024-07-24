@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "693579634952",
+    "project_id": "mco2-51af9",
+    "storage_bucket": "mco2-51af9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693579634952:android:c81318ec960f5c256bf4bd",
+        "android_client_info": {
+          "package_name": "com.mobdeve.s11.mco2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvd6Evfn3NnzNS-uDyBg32lJrksn0KerQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
