@@ -16,9 +16,13 @@ import com.google.firebase.database.FirebaseDatabase
 import android.content.Intent
 import android.graphics.Bitmap
 import android.provider.MediaStore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.UUID
 
 
 class SpendingFormActivity : ComponentActivity() {
@@ -99,6 +103,30 @@ class SpendingFormActivity : ComponentActivity() {
             val imageBitmap = data?.extras?.get("data") as Bitmap
             val imageView: ImageView = findViewById(R.id.itemPic)
             imageView.setImageBitmap(imageBitmap)
+
+            // Convert bitmap to byte array
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+            val imageData = byteArrayOutputStream.toByteArray()
+
+            // Get a reference to Firebase Storage
+            val storageReference: StorageReference = FirebaseStorage.getInstance().reference
+            val imageRef: StorageReference = storageReference.child("images/${UUID.randomUUID()}.jpg")
+
+            // Upload the image
+            imageRef.putBytes(imageData)
+                .addOnSuccessListener {
+                    imageRef.downloadUrl.addOnSuccessListener { uri ->
+                        // Get the download URL of the uploaded image
+                        val imageUrl = uri.toString()
+                        // Add data to Firebase Realtime Database including image URL
+                        val data = collectData() + mapOf("imageUrl" to imageUrl)
+                        addDataToFirebase(data)
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Error uploading image: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
         }
     }
     private fun getCurrentDateAndDay(): Pair<String, String> {
@@ -142,8 +170,8 @@ class SpendingFormActivity : ComponentActivity() {
     private fun setupButton2ClickListener() {
         val button2: Button = findViewById(R.id.button2)
         button2.setOnClickListener {
-            val data = collectData()
-            addDataToFirebase(data)
+            //val data = collectData()
+            //addDataToFirebase(data)
             finish()
         }
     }
