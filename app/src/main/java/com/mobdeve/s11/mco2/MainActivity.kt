@@ -27,6 +27,7 @@ class MainActivity : ComponentActivity() {
         val amountbudgetTv = findViewById<TextView>(R.id.amountbudgetTv)
         val wbudgetTv = findViewById<TextView>(R.id.wbudgetTv)
         val expTv = findViewById<TextView>(R.id.expTv)
+        val alertTv = findViewById<TextView>(R.id.alertTv)
         val currentDate = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault()).format(System.currentTimeMillis())
         dateTextView.text = currentDate
 
@@ -40,6 +41,12 @@ class MainActivity : ComponentActivity() {
             val exp = expTv.text.toString().toDoubleOrNull() ?: 0.0
             val amountBudget = wbudget - exp
             amountbudgetTv.text = String.format("%.2f", amountBudget)
+
+            if (amountBudget < 0) {
+                alertTv.text = "Out of Budget"
+            } else {
+                alertTv.text = "On Budget"
+            }
         } catch (e: NumberFormatException) {
             // Handle the case where the text could not be converted to a number
             amountbudgetTv.text = "Error"
