@@ -20,8 +20,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
 import java.util.UUID
-
-
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class SpendingFormActivity : ComponentActivity() {
     companion object {
@@ -99,40 +100,16 @@ class SpendingFormActivity : ComponentActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
-            val imageView: ImageView = findViewById(R.id.itemPic)
+            val imageView: ImageView = findViewById(R.id.imageView3)
             imageView.setImageBitmap(imageBitmap)
-
-            // Convert bitmap to byte array
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-            val imageData = byteArrayOutputStream.toByteArray()
-
-            // Get a reference to Firebase Storage
-            val storageReference: StorageReference = FirebaseStorage.getInstance().reference
-            val imageRef: StorageReference = storageReference.child("images/${UUID.randomUUID()}.jpg")
-
-            // Upload the image
-            imageRef.putBytes(imageData)
-                .addOnSuccessListener {
-                    imageRef.downloadUrl.addOnSuccessListener { uri ->
-                        // Get the download URL of the uploaded image
-                        val imageUrl = uri.toString()
-                        // Add data to Firebase Realtime Database including image URL
-                        val data = collectData() + mapOf("imageUrl" to imageUrl)
-                        addDataToFirebase(data)
-                    }
-                }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Error uploading image: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
         }
     }
-
 
     private fun collectData(): Map<String, Any> {
         val name = findViewById<EditText>(R.id.editTextText).text.toString()
         val amount = findViewById<EditText>(R.id.amountbudgetTv).text.toString()
         val category = findViewById<Spinner>(R.id.catSpinner).selectedItem.toString()
+
 
         return mapOf(
             "name" to name,
@@ -140,7 +117,6 @@ class SpendingFormActivity : ComponentActivity() {
             "category" to category,
         )
     }
-
 
     // Updated to use Firebase Realtime Database
     private fun addDataToFirebase(data: Map<String, Any>) {
@@ -154,10 +130,11 @@ class SpendingFormActivity : ComponentActivity() {
                     .show()
             }
     }
-
     private fun setupButton2ClickListener() {
         val button2: Button = findViewById(R.id.button2)
         button2.setOnClickListener {
+            val data = collectData()
+            addDataToFirebase(data)
             finish()
         }
     }
