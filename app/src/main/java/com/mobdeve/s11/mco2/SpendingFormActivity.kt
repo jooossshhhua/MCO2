@@ -168,8 +168,8 @@ class SpendingFormActivity : ComponentActivity() {
             }
     }
     private fun setupButton2ClickListener() {
-        val button2: Button = findViewById(R.id.button2)
-        button2.setOnClickListener {
+        val saveButton: Button = findViewById(R.id.saveButton)
+        saveButton.setOnClickListener {
             //val data = collectData()
             //addDataToFirebase(data)
             finish()

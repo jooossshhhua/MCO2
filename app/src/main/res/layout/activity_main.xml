@@ -110,7 +110,7 @@
                 app:layout_constraintVertical_bias="0.346" />
 
             <Button
-                android:id="@+id/button8"
+                android:id="@+id/editButton"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
                 android:layout_marginStart="115dp"
@@ -175,8 +175,7 @@
         <Button
             android:id="@+id/spendingFormBtn"
             android:layout_width="48dp"
-            android:layout_height="48dp
-"
+            android:layout_height="48dp"
             android:layout_gravity="bottom|end"
             android:layout_marginTop="100dp"
             android:layout_marginEnd="5dp"

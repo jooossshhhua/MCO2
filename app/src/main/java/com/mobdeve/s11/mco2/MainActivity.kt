@@ -51,13 +51,19 @@ class MainActivity : ComponentActivity() {
             startActivity(intent)
         }
 
+        val editButton = findViewById<Button>(R.id.editButton)
+        editButton.setOnClickListener {
+            val intent = Intent(this, EditWeeklyBudgetActivity::class.java)
+            startActivity(intent)
+        }
+
         try {
             val wbudget = wbudgetTv.text.toString().toDoubleOrNull() ?: 0.0
             val exp = expTv.text.toString().toDoubleOrNull() ?: 0.0
             val amountBudget = wbudget - exp
             amountbudgetTv.text = String.format("%.2f", amountBudget)
             if (amountBudget < 0) {
-                alertTv.text = "Out of Budget"
+                alertTv.text = "Exceed Budget"
                 linearLayout2.background = ContextCompat.getDrawable(this, R.drawable.darkred_radius)
             }
 
