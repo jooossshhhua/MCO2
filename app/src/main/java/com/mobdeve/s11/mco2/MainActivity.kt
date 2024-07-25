@@ -56,7 +56,6 @@ class MainActivity : ComponentActivity() {
             val exp = expTv.text.toString().toDoubleOrNull() ?: 0.0
             val amountBudget = wbudget - exp
             amountbudgetTv.text = String.format("%.2f", amountBudget)
-
             if (amountBudget < 0) {
                 alertTv.text = "Out of Budget"
                 linearLayout2.background = ContextCompat.getDrawable(this, R.drawable.darkred_radius)

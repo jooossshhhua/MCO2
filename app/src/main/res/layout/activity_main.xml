@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
-        android:layout_width="412dp"
+        android:layout_width="match_parent"
         android:layout_height="237dp"
         android:background="#62D5A9"
         android:backgroundTint="#62D5A9"
@@ -47,13 +47,14 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout4"
-            android:layout_width="413dp"
+            android:layout_width="match_parent"
             android:layout_height="65dp"
             android:background="#4AAA85"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.666"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/texpTv"
@@ -71,9 +72,9 @@
 
             <TextView
                 android:id="@+id/wbudgetTv"
-                android:layout_width="46dp"
+                android:layout_width="wrap_content"
                 android:layout_height="17dp"
-                android:layout_marginStart="64dp"
+                android:layout_marginStart="16dp"
                 android:text="100.00"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
@@ -110,13 +111,14 @@
 
             <Button
                 android:id="@+id/button8"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginStart="120dp"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginStart="115dp"
                 android:background="@drawable/pen"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.37" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -124,7 +126,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout3"
-        android:layout_width="415dp"
+        android:layout_width="match_parent"
         android:layout_height="580dp"
         android:background="@drawable/radius_border"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -138,10 +140,10 @@
             android:id="@+id/filterB"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="100dp"
             android:text="Filter"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.951"
+            app:layout_constraintHorizontal_bias="0.826"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -149,11 +151,12 @@
             android:id="@+id/todayB"
             android:layout_width="108dp"
             android:layout_height="48dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="100dp"
             android:background="@drawable/home_button"
             android:text="Today"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.048"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -161,19 +164,32 @@
             android:id="@+id/weeklyB"
             android:layout_width="108dp"
             android:layout_height="48dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="100dp"
             android:background="@drawable/home_button_unclicked"
             android:text="Weekly"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.42"
+            app:layout_constraintHorizontal_bias="0.424"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/spendingFormBtn"
+            android:layout_width="48dp"
+            android:layout_height="48dp
+"
+            android:layout_gravity="bottom|end"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="5dp"
+            android:text="+"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout2"
             android:layout_width="264dp"
             android:layout_height="58dp"
-            android:layout_marginTop="92dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/darkgreen_radius"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -198,18 +214,20 @@
                 android:layout_height="wrap_content"
                 android:text="June 21, 2024"
                 android:textColor="#000000"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.513"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.166" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ScrollView
-            android:layout_width="382dp"
+            android:layout_width="match_parent"
             android:layout_height="404dp"
+            android:layout_marginTop="25dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.484"
@@ -224,34 +242,18 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/transactionList"
-                    android:layout_width="385dp"
+                    android:layout_width="match_parent"
                     android:layout_height="551dp"
-                    android:layout_marginTop="16dp"
-                    tools:listitem="@layout/transaction_item"/>
+                    tools:listitem="@layout/transaction_item" />
 
             </LinearLayout>
         </ScrollView>
-
-        <Button
-            android:id="@+id/spendingFormBtn"
-            android:layout_width="60dp"
-            android:layout_height="48dp"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="+"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.97"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="418dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#67F494"
         app:layout_constraintEnd_toEndOf="parent"
