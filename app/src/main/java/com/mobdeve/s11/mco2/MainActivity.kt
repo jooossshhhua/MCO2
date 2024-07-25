@@ -5,37 +5,52 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Button
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AppCompatActivity
+import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import android.graphics.Color
+import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.Locale
-import com.mobdeve.s11.mco2.ui.theme.MCO2_S11Theme
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var dbref: DatabaseReference
+    private lateinit var transactionRecyclerView: RecyclerView
+    private lateinit var transactionArrayList: ArrayList<Transaction>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
         val dateTextView = findViewById<TextView>(R.id.dateTextView)
         val amountbudgetTv = findViewById<TextView>(R.id.amountbudgetTv)
         val wbudgetTv = findViewById<TextView>(R.id.wbudgetTv)
         val expTv = findViewById<TextView>(R.id.expTv)
         val alertTv = findViewById<TextView>(R.id.alertTv)
+        val linearLayout2 = findViewById<ConstraintLayout>(R.id.linearLayout2)
+
         val currentDate = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault()).format(System.currentTimeMillis())
         dateTextView.text = currentDate
 
+        transactionRecyclerView = findViewById(R.id.transactionList)
+        transactionRecyclerView.layoutManager = LinearLayoutManager(this)
+        transactionRecyclerView.setHasFixedSize(true)
+
+        transactionArrayList = arrayListOf()
+        getTransactionsData()
+
         val spendingButton = findViewById<Button>(R.id.spendingFormBtn)
-        spendingButton.setOnClickListener{
+        spendingButton.setOnClickListener {
             val intent = Intent(this, SpendingFormActivity::class.java)
             startActivity(intent)
         }
+
         try {
             val wbudget = wbudgetTv.text.toString().toDoubleOrNull() ?: 0.0
             val exp = expTv.text.toString().toDoubleOrNull() ?: 0.0
@@ -44,13 +59,38 @@ class MainActivity : ComponentActivity() {
 
             if (amountBudget < 0) {
                 alertTv.text = "Out of Budget"
-            } else {
+                linearLayout2.background = ContextCompat.getDrawable(this, R.drawable.darkred_radius)
+            }
+
+            else {
                 alertTv.text = "On Budget"
+                linearLayout2.background = ContextCompat.getDrawable(this, R.drawable.darkgreen_radius)
             }
         } catch (e: NumberFormatException) {
-            // Handle the case where the text could not be converted to a number
             amountbudgetTv.text = "Error"
         }
     }
 
+    private fun getTransactionsData() {
+        dbref = FirebaseDatabase.getInstance().getReference("transactions")
+
+        dbref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    transactionArrayList.clear()
+                    for (transactionSnapshot in snapshot.children) {
+                        val transaction = transactionSnapshot.getValue(Transaction::class.java)
+                        if (transaction != null) {
+                            transactionArrayList.add(transaction)
+                        }
+                    }
+                    transactionRecyclerView.adapter = MyAdapter(transactionArrayList)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle database error
+            }
+        })
+    }
 }

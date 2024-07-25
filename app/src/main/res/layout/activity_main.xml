@@ -223,10 +223,11 @@
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
+                    android:id="@+id/transactionList"
                     android:layout_width="385dp"
                     android:layout_height="551dp"
-                    android:layout_marginTop="16dp" />
+                    android:layout_marginTop="16dp"
+                    tools:listitem="@layout/transaction_item"/>
 
             </LinearLayout>
         </ScrollView>
