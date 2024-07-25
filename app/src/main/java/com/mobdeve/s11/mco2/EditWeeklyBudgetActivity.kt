@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import android.content.Intent
+import android.view.View
 import androidx.activity.ComponentActivity
 import android.widget.Button
 import android.widget.EditText
@@ -16,20 +17,27 @@ class EditWeeklyBudgetActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.edit_weekly_budget)
 
-        val amountbudgetTv: EditText = findViewById(R.id.amountbudgetTv)
+
         val saveButton: Button = findViewById(R.id.saveButton)
         val exitButton: Button = findViewById(R.id.exitButton)
 
-        saveButton.setOnClickListener {
-            val newBudget = amountbudgetTv.text.toString()
-            val resultIntent = Intent()
-            resultIntent.putExtra("newBudget", newBudget)
-            setResult(Activity.RESULT_OK, resultIntent)
-            finish()
+        saveButton.setOnClickListener{
+            callingActivity()
         }
+
 
         exitButton.setOnClickListener {
             finish()
         }
     }
+    private fun callingActivity() {
+        val amountbudgetTv: EditText = findViewById(R.id.amountbudgetTv)
+        val message = amountbudgetTv.text.toString()
+        val resultIntent = Intent().apply {
+            putExtra("EXTRA_MESSAGE", message)
+        }
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+    }
+
 }

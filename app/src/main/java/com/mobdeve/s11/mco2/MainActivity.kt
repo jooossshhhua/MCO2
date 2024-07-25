@@ -20,13 +20,15 @@ import java.util.Locale
 
 class MainActivity : ComponentActivity() {
 
-    companion object {
-        const val REQUEST_CODE_EDIT_BUDGET = 1
-    }
-
     private lateinit var dbref: DatabaseReference
     private lateinit var transactionRecyclerView: RecyclerView
     private lateinit var transactionArrayList: ArrayList<Transaction>
+
+    private lateinit var wbudgetTv: TextView
+    private lateinit var amountbudgetTv: TextView
+    private lateinit var expTv: TextView
+    private lateinit var alertTv: TextView
+    private lateinit var linearLayout2: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +36,11 @@ class MainActivity : ComponentActivity() {
         setContentView(R.layout.activity_main)
 
         val dateTextView = findViewById<TextView>(R.id.dateTextView)
-        val amountbudgetTv = findViewById<TextView>(R.id.amountbudgetTv)
-        val wbudgetTv = findViewById<TextView>(R.id.wbudgetTv)
-        val expTv = findViewById<TextView>(R.id.expTv)
-        val alertTv = findViewById<TextView>(R.id.alertTv)
-        val linearLayout2 = findViewById<ConstraintLayout>(R.id.linearLayout2)
+        amountbudgetTv = findViewById<TextView>(R.id.amountbudgetTv)
+        wbudgetTv = findViewById<TextView>(R.id.wbudgetTv)
+        expTv = findViewById<TextView>(R.id.expTv)
+        alertTv = findViewById<TextView>(R.id.alertTv)
+        linearLayout2 = findViewById<ConstraintLayout>(R.id.linearLayout2)
 
         val currentDate = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault()).format(System.currentTimeMillis())
         dateTextView.text = currentDate
@@ -52,16 +54,28 @@ class MainActivity : ComponentActivity() {
 
         val spendingButton = findViewById<Button>(R.id.spendingFormBtn)
         spendingButton.setOnClickListener {
-            val intent = Intent(this, SpendingFormActivity::class.java)
-            startActivity(intent)
+            val i = Intent(this, SpendingFormActivity::class.java)
+            startActivity(i)
         }
 
         val editButton = findViewById<Button>(R.id.editButton)
         editButton.setOnClickListener {
-            val intent = Intent(this, EditWeeklyBudgetActivity::class.java)
-            startActivityForResult(intent, REQUEST_CODE_EDIT_BUDGET)
+            val i = Intent(this, EditWeeklyBudgetActivity::class.java)
+            startActivityForResult(i, EDIT_REQUEST_CODE)
         }
+        updateBudgetDisplay()
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == EDIT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val message = data?.getStringExtra("EXTRA_MESSAGE")
+            wbudgetTv.text = message
+            updateBudgetDisplay()
+        }
+    }
+
+    private fun updateBudgetDisplay() {
         try {
             val wbudget = wbudgetTv.text.toString().toDoubleOrNull() ?: 0.0
             val exp = expTv.text.toString().toDoubleOrNull() ?: 0.0
@@ -70,45 +84,12 @@ class MainActivity : ComponentActivity() {
             if (amountBudget < 0) {
                 alertTv.text = "Exceed Budget"
                 linearLayout2.background = ContextCompat.getDrawable(this, R.drawable.darkred_radius)
-            }
-
-            else {
+            } else {
                 alertTv.text = "On Budget"
                 linearLayout2.background = ContextCompat.getDrawable(this, R.drawable.darkgreen_radius)
             }
         } catch (e: NumberFormatException) {
             amountbudgetTv.text = "Error"
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_EDIT_BUDGET && resultCode == Activity.RESULT_OK) {
-            val newBudget = data?.getStringExtra("newBudget")
-            val amountbudgetTv = findViewById<TextView>(R.id.amountbudgetTv)
-            amountbudgetTv.text = newBudget
-
-            // Update the budget check
-            val wbudgetTv = findViewById<TextView>(R.id.wbudgetTv)
-            val expTv = findViewById<TextView>(R.id.expTv)
-            val alertTv = findViewById<TextView>(R.id.alertTv)
-            val linearLayout2 = findViewById<ConstraintLayout>(R.id.linearLayout2)
-
-            try {
-                val wbudget = wbudgetTv.text.toString().toDoubleOrNull() ?: 0.0
-                val exp = expTv.text.toString().toDoubleOrNull() ?: 0.0
-                val amountBudget = wbudget - exp
-                amountbudgetTv.text = String.format("%.2f", amountBudget)
-                if (amountBudget < 0) {
-                    alertTv.text = "Exceed Budget"
-                    linearLayout2.background = ContextCompat.getDrawable(this, R.drawable.darkred_radius)
-                } else {
-                    alertTv.text = "On Budget"
-                    linearLayout2.background = ContextCompat.getDrawable(this, R.drawable.darkgreen_radius)
-                }
-            } catch (e: NumberFormatException) {
-                amountbudgetTv.text = "Error"
-            }
         }
     }
 
@@ -133,5 +114,8 @@ class MainActivity : ComponentActivity() {
                 // Handle database error
             }
         })
+    }
+    companion object {
+        const val EDIT_REQUEST_CODE = 1
     }
 }
