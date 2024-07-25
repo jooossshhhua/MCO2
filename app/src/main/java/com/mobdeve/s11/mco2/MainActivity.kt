@@ -1,5 +1,6 @@
 package com.mobdeve.s11.mco2
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
@@ -18,6 +19,10 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
+
+    companion object {
+        const val REQUEST_CODE_EDIT_BUDGET = 1
+    }
 
     private lateinit var dbref: DatabaseReference
     private lateinit var transactionRecyclerView: RecyclerView
@@ -54,7 +59,7 @@ class MainActivity : ComponentActivity() {
         val editButton = findViewById<Button>(R.id.editButton)
         editButton.setOnClickListener {
             val intent = Intent(this, EditWeeklyBudgetActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_EDIT_BUDGET)
         }
 
         try {
@@ -73,6 +78,37 @@ class MainActivity : ComponentActivity() {
             }
         } catch (e: NumberFormatException) {
             amountbudgetTv.text = "Error"
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_EDIT_BUDGET && resultCode == Activity.RESULT_OK) {
+            val newBudget = data?.getStringExtra("newBudget")
+            val amountbudgetTv = findViewById<TextView>(R.id.amountbudgetTv)
+            amountbudgetTv.text = newBudget
+
+            // Update the budget check
+            val wbudgetTv = findViewById<TextView>(R.id.wbudgetTv)
+            val expTv = findViewById<TextView>(R.id.expTv)
+            val alertTv = findViewById<TextView>(R.id.alertTv)
+            val linearLayout2 = findViewById<ConstraintLayout>(R.id.linearLayout2)
+
+            try {
+                val wbudget = wbudgetTv.text.toString().toDoubleOrNull() ?: 0.0
+                val exp = expTv.text.toString().toDoubleOrNull() ?: 0.0
+                val amountBudget = wbudget - exp
+                amountbudgetTv.text = String.format("%.2f", amountBudget)
+                if (amountBudget < 0) {
+                    alertTv.text = "Exceed Budget"
+                    linearLayout2.background = ContextCompat.getDrawable(this, R.drawable.darkred_radius)
+                } else {
+                    alertTv.text = "On Budget"
+                    linearLayout2.background = ContextCompat.getDrawable(this, R.drawable.darkgreen_radius)
+                }
+            } catch (e: NumberFormatException) {
+                amountbudgetTv.text = "Error"
+            }
         }
     }
 
