@@ -49,8 +49,20 @@ class MainActivity : ComponentActivity() {
         transactionRecyclerView.layoutManager = LinearLayoutManager(this)
         transactionRecyclerView.setHasFixedSize(true)
 
+        val weeklyB = findViewById<Button>(R.id.weeklyB)
+        val todayB = findViewById<Button>(R.id.todayB)
+        weeklyB.setOnClickListener{
+            weeklyB.background = ContextCompat.getDrawable(this, R.drawable.home_button)
+            todayB.background = ContextCompat.getDrawable(this, R.drawable.home_button_unclicked)
+        }
+        todayB.setOnClickListener{
+            todayB.background = ContextCompat.getDrawable(this, R.drawable.home_button)
+            weeklyB.background = ContextCompat.getDrawable(this, R.drawable.home_button_unclicked)
+        }
+
         transactionArrayList = arrayListOf()
         getTransactionsData()
+
 
         val spendingButton = findViewById<Button>(R.id.spendingFormBtn)
         spendingButton.setOnClickListener {
