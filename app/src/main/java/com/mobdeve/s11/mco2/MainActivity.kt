@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import android.graphics.Color
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
@@ -51,13 +52,27 @@ class MainActivity : ComponentActivity() {
 
         val weeklyB = findViewById<Button>(R.id.weeklyB)
         val todayB = findViewById<Button>(R.id.todayB)
+        val allButton = findViewById<Button>(R.id.allButton)
         weeklyB.setOnClickListener{
             weeklyB.background = ContextCompat.getDrawable(this, R.drawable.home_button)
             todayB.background = ContextCompat.getDrawable(this, R.drawable.home_button_unclicked)
+            allButton.background = ContextCompat.getDrawable(this, R.drawable.home_button_unclicked)
+            filterTransactionsByWeek()
         }
         todayB.setOnClickListener{
             todayB.background = ContextCompat.getDrawable(this, R.drawable.home_button)
             weeklyB.background = ContextCompat.getDrawable(this, R.drawable.home_button_unclicked)
+            allButton.background = ContextCompat.getDrawable(this, R.drawable.home_button_unclicked)
+
+            val currentDate = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault()).format(System.currentTimeMillis())
+            filterTransactionsByDate(currentDate)
+        }
+        allButton.setOnClickListener{
+            allButton.background = ContextCompat.getDrawable(this, R.drawable.home_button)
+            weeklyB.background = ContextCompat.getDrawable(this, R.drawable.home_button_unclicked)
+            todayB.background = ContextCompat.getDrawable(this, R.drawable.home_button_unclicked)
+            transactionArrayList = arrayListOf()
+            getTransactionsData()
         }
 
         transactionArrayList = arrayListOf()
@@ -131,6 +146,37 @@ class MainActivity : ComponentActivity() {
             }
         })
     }
+
+    private fun filterTransactionsByDate(date: String) {
+        val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+        val filteredList = transactionArrayList.filter { transaction ->
+            dateFormat.format(dateFormat.parse(transaction.date)).equals(dateFormat.format(dateFormat.parse(date)))
+        }
+        // Convert List to ArrayList
+        val filteredArrayList = ArrayList(filteredList)
+        transactionRecyclerView.adapter = MyAdapter(filteredArrayList)
+    }
+
+    private fun filterTransactionsByWeek() {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+
+        // Get start and end date of the current week
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        val startOfWeek = calendar.time
+        calendar.add(Calendar.WEEK_OF_YEAR, 1)
+        val endOfWeek = calendar.time
+
+        val filteredList = transactionArrayList.filter { transaction ->
+            val transactionDate = dateFormat.parse(transaction.date)
+            transactionDate != null && transactionDate.after(startOfWeek) && transactionDate.before(endOfWeek)
+        }
+        // Convert List to ArrayList
+        val filteredArrayList = ArrayList(filteredList)
+        transactionRecyclerView.adapter = MyAdapter(filteredArrayList)
+    }
+
+
     companion object {
         const val EDIT_REQUEST_CODE = 1
     }
