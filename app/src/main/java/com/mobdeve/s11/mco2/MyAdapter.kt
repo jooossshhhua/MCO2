@@ -1,5 +1,6 @@
 package com.mobdeve.s11.mco2
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,18 @@ class MyAdapter (private val transactionList : ArrayList<Transaction>) : Recycle
         holder.amount.text = currentItem.amount
         holder.category.text = currentItem.category
         holder.date.text = currentItem.date
+
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, TransactionDetailActivity::class.java).apply {
+                putExtra("amount", currentItem.amount)
+                putExtra("category", currentItem.category)
+                putExtra("name", currentItem.name)
+                putExtra("date", currentItem.date)
+                putExtra("photoUrl", currentItem.imageUrl)
+            }
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int {

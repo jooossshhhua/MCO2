@@ -4,4 +4,6 @@ data class Transaction(
     var amount : String ?= null,
     var category : String ?= null,
     var name : String ?= null,
-    var date : String ?= null)
+    var date : String ?= null,
+    var imageUrl : String ?= null)
+
