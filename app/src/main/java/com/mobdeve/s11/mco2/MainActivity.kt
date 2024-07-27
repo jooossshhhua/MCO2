@@ -149,31 +149,39 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun getTransactionsData() {
-        dbref = FirebaseDatabase.getInstance().getReference("transactions")
+        val user = FirebaseAuth.getInstance().currentUser?.uid
 
-        dbref.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    transactionArrayList.clear()
-                    val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
-                    for (transactionSnapshot in snapshot.children) {
-                        val transaction = transactionSnapshot.getValue(Transaction::class.java)
-                        if (transaction != null) {
-                            transactionArrayList.add(transaction)
+        if(user != null){
+            dbref = FirebaseDatabase.getInstance().getReference("users").child(user).child("transactions")
+
+            dbref.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        transactionArrayList.clear()
+                        val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+                        for (transactionSnapshot in snapshot.children) {
+                            val transaction = transactionSnapshot.getValue(Transaction::class.java)
+                            if (transaction != null) {
+                                transactionArrayList.add(transaction)
+                            }
                         }
+                        transactionArrayList.sortByDescending { transaction ->
+                            dateFormat.parse(transaction.date)?.time ?: 0L
+                        }
+                        transactionRecyclerView.adapter = MyAdapter(transactionArrayList)
+                        updateWeeklyExpense()
                     }
-                    transactionArrayList.sortByDescending { transaction ->
-                        dateFormat.parse(transaction.date)?.time ?: 0L
-                    }
-                    transactionRecyclerView.adapter = MyAdapter(transactionArrayList)
-                    updateWeeklyExpense()
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Handle database error
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle database error
+                }
+            })
+        }
+        else{
+            //Toast.makeText(this, "User not signed in", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     private fun filterTransactionsByDate(date: String) {

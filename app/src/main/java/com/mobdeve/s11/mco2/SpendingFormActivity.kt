@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase
 import android.content.Intent
 import android.graphics.Bitmap
 import android.provider.MediaStore
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
@@ -157,15 +158,25 @@ class SpendingFormActivity : ComponentActivity() {
 
     // Updated to use Firebase Realtime Database
     private fun addDataToFirebase(data: Map<String, Any>) {
-        val dbRef = FirebaseDatabase.getInstance().getReference("transactions")
-        dbRef.push().setValue(data)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Transaction added successfully", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Error adding transaction: ${e.message}", Toast.LENGTH_SHORT)
-                    .show()
-            }
+        val user = FirebaseAuth.getInstance().currentUser?.uid
+
+        if(user != null)
+        {
+            val dbRef = FirebaseDatabase.getInstance().getReference("users").child(user).child("transactions")
+            dbRef.push().setValue(data)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Transaction added successfully", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Error adding transaction: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+        }
+        else{
+            Toast.makeText(this, "User not signed in.", Toast.LENGTH_SHORT)
+                .show()
+        }
+
     }
     private fun setupButton2ClickListener() {
         val saveButton: Button = findViewById(R.id.saveButton)
