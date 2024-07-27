@@ -92,7 +92,7 @@
         android:layout_marginTop="280dp"
         android:autoText="false"
         android:ems="10"
-        android:hint="Username"
+        android:hint="Name"
         android:inputType="text"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
