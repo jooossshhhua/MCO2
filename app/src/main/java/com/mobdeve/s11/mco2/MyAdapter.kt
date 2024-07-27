@@ -21,7 +21,7 @@ class MyAdapter (private val transactionList : ArrayList<Transaction>) : Recycle
         holder.name.text = currentItem.name
         holder.amount.text = currentItem.amount
         holder.category.text = currentItem.category
-        holder.date.text = currentItem.date
+        holder.date.text = currentItem.displayDate
 
         when (currentItem.category) {
             "Food" -> holder.itemLayout.background = ContextCompat.getDrawable(holder.itemView.context, R.drawable.bookmark_food)

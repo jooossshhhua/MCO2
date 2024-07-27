@@ -132,17 +132,14 @@ class SpendingFormActivity : ComponentActivity() {
     }
     private fun getCurrentDateAndDay(): Pair<String, String> {
         val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
-        val formattedDate = dateFormat.format(calendar.time)
+        val dateTimeFormat = SimpleDateFormat("MMMM dd, yyyy-HH:mm:ss", Locale.getDefault())
+        val formattedDate = dateTimeFormat.format(calendar.time)
 
-        val daysOfWeek = arrayOf("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
-        val dayOfWeek = daysOfWeek[calendar.get(Calendar.DAY_OF_WEEK) - 1]
-
-        return Pair(formattedDate, dayOfWeek)
+        return Pair(formattedDate, "")
     }
 
     private fun collectData(): Map<String, Any> {
-        val (date, day) = getCurrentDateAndDay()
+        val (date, _) = getCurrentDateAndDay()
         val name = findViewById<EditText>(R.id.editTextText).text.toString()
         val amount = findViewById<EditText>(R.id.amountbudgetTv).text.toString()
         val category = findViewById<Spinner>(R.id.catSpinner).selectedItem.toString()
@@ -152,7 +149,6 @@ class SpendingFormActivity : ComponentActivity() {
             "amount" to amount,
             "category" to category,
             "date" to date,
-            "day" to day
         )
     }
 
@@ -181,8 +177,6 @@ class SpendingFormActivity : ComponentActivity() {
     private fun setupButton2ClickListener() {
         val saveButton: Button = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {
-            //val data = collectData()
-            //addDataToFirebase(data)
             finish()
         }
     }

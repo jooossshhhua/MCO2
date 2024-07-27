@@ -47,7 +47,6 @@ class MainActivity : ComponentActivity() {
         logout = findViewById(R.id.logout)
         email = findViewById(R.id.email)
 
-
         val user = auth.currentUser
 
         if(user == null){
@@ -179,7 +178,7 @@ class MainActivity : ComponentActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
                         transactionArrayList.clear()
-                        val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+                        val dateFormat = SimpleDateFormat("MMMM d, yyyy-HH:mm:ss", Locale.getDefault())
                         for (transactionSnapshot in snapshot.children) {
                             val transaction = transactionSnapshot.getValue(Transaction::class.java)
                             if (transaction != null) {
