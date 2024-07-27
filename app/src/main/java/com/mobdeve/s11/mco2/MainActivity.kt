@@ -48,6 +48,7 @@ class MainActivity : ComponentActivity() {
         email = findViewById(R.id.email)
 
         val user = auth.currentUser
+        val userId = auth.currentUser?.uid
 
         if(user == null){
             val i = Intent(this, SigninActivity::class.java)
@@ -57,7 +58,9 @@ class MainActivity : ComponentActivity() {
         else{
             email.setText(user.email.toString())
             fetchAndUpdateBudget(user.uid)
+            fetchAndDisplayUsername(user.uid)
         }
+
 
         logout.setOnClickListener(){
             FirebaseAuth.getInstance().signOut()
@@ -132,14 +135,28 @@ class MainActivity : ComponentActivity() {
             updateBudgetDisplay()
         }
     }
+    private fun fetchAndDisplayUsername(userId: String) {
+        val dbRef = FirebaseDatabase.getInstance().getReference("users").child(userId).child("username")
+        dbRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val username = snapshot.getValue(String::class.java)
+                if (username != null) {
+                    email.text = username  
+                }
+            }
 
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@MainActivity, "Failed to retrieve username: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
     private fun fetchAndUpdateBudget(user: String) {
         dbref = FirebaseDatabase.getInstance().getReference("users").child(user).child("wbudget")
 
         dbref.child("wbudget").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val weeklyBudget = snapshot.getValue(Double::class.java) ?: 0.00
-                wbudgetTv.text = weeklyBudget.toString()  // Update the TextView with the budget value
+                wbudgetTv.text = String.format("%.2f", weeklyBudget)  // Update the TextView with the budget value
                 updateBudgetDisplay()
             }
 

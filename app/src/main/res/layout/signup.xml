@@ -29,18 +29,20 @@
 
     <Button
         android:id="@+id/signButton"
-        android:layout_width="366dp"
+        android:layout_width="150dp"
         android:layout_height="52dp"
-        android:layout_marginBottom="156dp"
+        android:layout_marginBottom="160dp"
+        android:background="#212F42"
         android:text="SIGN UP"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/signupconfirmTv"
-        android:layout_width="366dp"
+        android:layout_width="350dp"
         android:layout_height="59dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="528dp"
@@ -50,13 +52,13 @@
         android:password="true"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.703"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/signupemailTv"
-        android:layout_width="366dp"
+        android:layout_width="350dp"
         android:layout_height="64dp"
         android:layout_marginTop="360dp"
         android:ems="10"
@@ -64,13 +66,13 @@
         android:inputType="text"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.644"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/signuppassTv"
-        android:layout_width="366dp"
+        android:layout_width="350dp"
         android:layout_height="59dp"
         android:layout_marginTop="444dp"
         android:ems="10"
@@ -79,24 +81,22 @@
         android:password="true"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.622"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/signupuserTv"
-        android:layout_width="366dp"
+        android:layout_width="350dp"
         android:layout_height="67dp"
-        android:layout_marginStart="10dp"
         android:layout_marginTop="280dp"
-        android:layout_marginEnd="13dp"
         android:autoText="false"
         android:ems="10"
         android:hint="Username"
         android:inputType="text"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.863"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -104,7 +104,7 @@
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="124dp"
         android:layout_marginBottom="100dp"
         android:text="Already have an account?"
         android:textColor="#000000"
@@ -115,11 +115,11 @@
         android:id="@+id/signinnow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="72dp"
         android:text="Sign In"
         android:textColor="#67F393"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
