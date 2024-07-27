@@ -9,15 +9,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.appcompat.app.AppCompatActivity
-import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import android.graphics.Color
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -170,6 +166,7 @@ class MainActivity : ComponentActivity() {
                         dateFormat.parse(transaction.date)?.time ?: 0L
                     }
                     transactionRecyclerView.adapter = MyAdapter(transactionArrayList)
+                    updateWeeklyExpense()
                 }
             }
 
@@ -187,6 +184,29 @@ class MainActivity : ComponentActivity() {
         // Convert List to ArrayList
         val filteredArrayList = ArrayList(filteredList)
         transactionRecyclerView.adapter = MyAdapter(filteredArrayList)
+    }
+
+    private fun updateWeeklyExpense() {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+
+        // Get start and end date of the current week
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        val startOfWeek = calendar.time
+        calendar.add(Calendar.WEEK_OF_YEAR, 1)
+        val endOfWeek = calendar.time
+
+        val weeklyExpenses = transactionArrayList
+            .filter { transaction ->
+                val transactionDate = dateFormat.parse(transaction.date)
+                transactionDate != null && transactionDate.after(startOfWeek) && transactionDate.before(endOfWeek)
+            }
+            .sumByDouble { transaction ->
+                transaction.amount?.toDoubleOrNull() ?: 0.0
+            }
+
+        expTv.text = String.format("%.2f", weeklyExpenses)
+        updateBudgetDisplay()
     }
 
     private fun filterTransactionsByWeek() {
