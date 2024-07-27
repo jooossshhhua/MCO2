@@ -70,12 +70,39 @@ class SignupActivity: ComponentActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Toast.makeText(
-                            baseContext,
-                            "Account created.",
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                        //val user = auth.currentUser
+                        val user = auth.currentUser
+                        val userId = user?.uid
+
+                        if (userId != null) {
+                            val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+                            val userMap = mapOf(
+                                "username" to username,
+                                "email" to email
+                            )
+
+                            databaseReference.setValue(userMap).addOnCompleteListener { dbTask ->
+                                if (dbTask.isSuccessful) {
+                                    Toast.makeText(
+                                        baseContext,
+                                        "Account created and username saved.",
+                                        Toast.LENGTH_SHORT,
+                                    ).show()
+                                    // Redirect to another activity or update UI
+                                } else {
+                                    Toast.makeText(
+                                        baseContext,
+                                        "Failed to save username.",
+                                        Toast.LENGTH_SHORT,
+                                    ).show()
+                                }
+                            }
+                        } else {
+                            Toast.makeText(
+                                baseContext,
+                                "User ID is null.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
                     } else {
                         // If sign in fails, display a message to the user.
                         Toast.makeText(
