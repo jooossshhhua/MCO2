@@ -14,12 +14,20 @@ import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import android.graphics.Color
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var user: FirebaseUser
+    private lateinit var auth: FirebaseAuth
+    private lateinit var logout: TextView
+    private lateinit var email: TextView
 
     private lateinit var dbref: DatabaseReference
     private lateinit var transactionRecyclerView: RecyclerView
@@ -35,6 +43,30 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        //USER AUTH
+        auth = FirebaseAuth.getInstance()
+        logout = findViewById(R.id.logout)
+        email = findViewById(R.id.email)
+        val user = auth.currentUser
+
+        if(user == null){
+            val i = Intent(this, SigninActivity::class.java)
+            startActivity(i)
+            finish()
+        }
+        else{
+            email.setText(user.email.toString())
+        }
+
+        logout.setOnClickListener(){
+            FirebaseAuth.getInstance().signOut()
+            val i = Intent(this, SigninActivity::class.java)
+            startActivity(i)
+            finish()
+        }
+
+
 
         val dateTextView = findViewById<TextView>(R.id.dateTextView)
         amountbudgetTv = findViewById<TextView>(R.id.amountbudgetTv)
