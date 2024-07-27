@@ -156,7 +156,7 @@ class MainActivity : ComponentActivity() {
         dbref.child("wbudget").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val weeklyBudget = snapshot.getValue(Double::class.java) ?: 0.00
-                wbudgetTv.text = weeklyBudget.toString()  // Update the TextView with the budget value
+                wbudgetTv.text = String.format("%.2f", weeklyBudget)  // Update the TextView with the budget value
                 updateBudgetDisplay()
             }
 
@@ -195,7 +195,7 @@ class MainActivity : ComponentActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
                         transactionArrayList.clear()
-                        val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+                        val dateFormat = SimpleDateFormat("MMMM d, yyyy-HH:mm:ss", Locale.getDefault())
                         for (transactionSnapshot in snapshot.children) {
                             val transaction = transactionSnapshot.getValue(Transaction::class.java)
                             if (transaction != null) {

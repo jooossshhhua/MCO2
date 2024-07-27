@@ -18,10 +18,11 @@ class MyAdapter (private val transactionList : ArrayList<Transaction>) : Recycle
 
     override fun onBindViewHolder (holder: MyViewHolder, position: Int) {
         val currentItem = transactionList[position]
+        val formattedAmount = String.format("%.2f", currentItem.amount?.toDoubleOrNull() ?: 0.0)
         holder.name.text = currentItem.name
-        holder.amount.text = currentItem.amount
+        holder.amount.text = formattedAmount
         holder.category.text = currentItem.category
-        holder.date.text = currentItem.date
+        holder.date.text = currentItem.displayDate
 
         when (currentItem.category) {
             "Food" -> holder.itemLayout.background = ContextCompat.getDrawable(holder.itemView.context, R.drawable.bookmark_food)
