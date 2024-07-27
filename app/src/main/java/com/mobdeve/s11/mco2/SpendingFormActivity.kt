@@ -25,11 +25,12 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
 
-
 class SpendingFormActivity : ComponentActivity() {
     companion object {
         private const val CAMERA_REQUEST_CODE = 100
     }
+
+    private var imageUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +39,9 @@ class SpendingFormActivity : ComponentActivity() {
         setupSpinner()
         setupCloseButton()
         setupPhotoButton()
-        setupButton2ClickListener() // Moved inside onCreate
+        setupButton2ClickListener()
     }
+
     private fun setupSpinner() {
         val spinner: Spinner = findViewById(R.id.catSpinner)
         ArrayAdapter.createFromResource(
@@ -119,10 +121,8 @@ class SpendingFormActivity : ComponentActivity() {
                 .addOnSuccessListener {
                     imageRef.downloadUrl.addOnSuccessListener { uri ->
                         // Get the download URL of the uploaded image
-                        val imageUrl = uri.toString()
-                        // Add data to Firebase Realtime Database including image URL
-                        val data = collectData() + mapOf("imageUrl" to imageUrl)
-                        addDataToFirebase(data)
+                        imageUrl = uri.toString()
+                        Toast.makeText(this, "Image uploaded successfully", Toast.LENGTH_SHORT).show()
                     }
                 }
                 .addOnFailureListener { e ->
@@ -130,6 +130,7 @@ class SpendingFormActivity : ComponentActivity() {
                 }
         }
     }
+
     private fun getCurrentDateAndDay(): Pair<String, String> {
         val calendar = Calendar.getInstance()
         val dateTimeFormat = SimpleDateFormat("MMMM dd, yyyy-HH:mm:ss", Locale.getDefault())
@@ -152,32 +153,37 @@ class SpendingFormActivity : ComponentActivity() {
         )
     }
 
-    // Updated to use Firebase Realtime Database
     private fun addDataToFirebase(data: Map<String, Any>) {
         val user = FirebaseAuth.getInstance().currentUser?.uid
 
-        if(user != null)
-        {
+        if (user != null) {
             val dbRef = FirebaseDatabase.getInstance().getReference("users").child(user).child("transactions")
             dbRef.push().setValue(data)
                 .addOnSuccessListener {
                     Toast.makeText(this, "Transaction added successfully", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "Error adding transaction: ${e.message}", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(this, "Error adding transaction: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
+        } else {
+            Toast.makeText(this, "User not signed in.", Toast.LENGTH_SHORT).show()
         }
-        else{
-            Toast.makeText(this, "User not signed in.", Toast.LENGTH_SHORT)
-                .show()
-        }
-
     }
+
     private fun setupButton2ClickListener() {
         val saveButton: Button = findViewById(R.id.saveButton)
         saveButton.setOnClickListener {
-            finish()
+            val name = findViewById<EditText>(R.id.editTextText).text.toString()
+            val amount = findViewById<EditText>(R.id.amountbudgetTv).text.toString()
+            val category = findViewById<Spinner>(R.id.catSpinner).selectedItem.toString()
+
+            if (name.isEmpty() || amount.isEmpty() || category.isEmpty() || imageUrl.isNullOrEmpty()) {
+                Toast.makeText(this, "All fields and a photo are required", Toast.LENGTH_SHORT).show()
+            } else {
+                val data = collectData() + mapOf("imageUrl" to imageUrl!!)
+                addDataToFirebase(data)
+                finish()
+            }
         }
     }
 }
