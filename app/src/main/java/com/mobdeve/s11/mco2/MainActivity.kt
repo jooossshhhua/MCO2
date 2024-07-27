@@ -141,7 +141,7 @@ class MainActivity : ComponentActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val username = snapshot.getValue(String::class.java)
                 if (username != null) {
-                    email.text = username  // Display username
+                    email.text = username  
                 }
             }
 

@@ -26,7 +26,6 @@ class SignupActivity: ComponentActivity() {
 
     public override fun onStart() {
         super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if (currentUser != null) {
             val i = Intent(this, MainActivity::class.java)
@@ -69,7 +68,6 @@ class SignupActivity: ComponentActivity() {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
                         val user = auth.currentUser
                         val userId = user?.uid
 
@@ -84,10 +82,9 @@ class SignupActivity: ComponentActivity() {
                                 if (dbTask.isSuccessful) {
                                     Toast.makeText(
                                         baseContext,
-                                        "Account created and username saved.",
+                                        "Account created.",
                                         Toast.LENGTH_SHORT,
                                     ).show()
-                                    // Redirect to another activity or update UI
                                 } else {
                                     Toast.makeText(
                                         baseContext,
@@ -104,7 +101,6 @@ class SignupActivity: ComponentActivity() {
                             ).show()
                         }
                     } else {
-                        // If sign in fails, display a message to the user.
                         Toast.makeText(
                             baseContext,
                             "Account creation failed.",
