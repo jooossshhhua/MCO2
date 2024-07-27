@@ -19,7 +19,7 @@
 
     <EditText
         android:id="@+id/signpassTv"
-        android:layout_width="381dp"
+        android:layout_width="350dp"
         android:layout_height="59dp"
         android:layout_marginTop="428dp"
         android:ems="10"
@@ -46,7 +46,7 @@
 
     <EditText
         android:id="@+id/signuserTv"
-        android:layout_width="381dp"
+        android:layout_width="350dp"
         android:layout_height="59dp"
         android:layout_marginTop="344dp"
         android:ems="10"
@@ -60,16 +60,16 @@
 
     <Button
         android:id="@+id/logButton"
-        android:layout_width="381dp"
+        android:layout_width="150dp"
         android:layout_height="52dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="566dp"
-        android:layout_marginEnd="14dp"
         android:layout_marginBottom="113dp"
+        android:background="#212F42"
         android:text="SIGN IN"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
