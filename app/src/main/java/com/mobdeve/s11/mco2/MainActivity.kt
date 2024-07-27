@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var logout: TextView
     private lateinit var email: TextView
+    private lateinit var bud: TextView
 
     private lateinit var dbref: DatabaseReference
     private lateinit var transactionRecyclerView: RecyclerView
@@ -44,6 +46,8 @@ class MainActivity : ComponentActivity() {
         auth = FirebaseAuth.getInstance()
         logout = findViewById(R.id.logout)
         email = findViewById(R.id.email)
+
+
         val user = auth.currentUser
 
         if(user == null){
@@ -53,6 +57,7 @@ class MainActivity : ComponentActivity() {
         }
         else{
             email.setText(user.email.toString())
+            fetchAndUpdateBudget(user.uid)
         }
 
         logout.setOnClickListener(){
@@ -61,8 +66,6 @@ class MainActivity : ComponentActivity() {
             startActivity(i)
             finish()
         }
-
-
 
         val dateTextView = findViewById<TextView>(R.id.dateTextView)
         amountbudgetTv = findViewById<TextView>(R.id.amountbudgetTv)
@@ -118,6 +121,7 @@ class MainActivity : ComponentActivity() {
             val i = Intent(this, EditWeeklyBudgetActivity::class.java)
             startActivityForResult(i, EDIT_REQUEST_CODE)
         }
+
         updateBudgetDisplay()
     }
 
@@ -128,6 +132,23 @@ class MainActivity : ComponentActivity() {
             wbudgetTv.text = message
             updateBudgetDisplay()
         }
+    }
+
+    private fun fetchAndUpdateBudget(user: String) {
+        dbref = FirebaseDatabase.getInstance().getReference("users").child(user).child("wbudget")
+
+        dbref.child("wbudget").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val weeklyBudget = snapshot.getValue(Double::class.java) ?: 0.00
+                wbudgetTv.text = weeklyBudget.toString()  // Update the TextView with the budget value
+                updateBudgetDisplay()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle possible errors
+                //Toast.makeText(this, "Failed to load budget: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun updateBudgetDisplay() {
