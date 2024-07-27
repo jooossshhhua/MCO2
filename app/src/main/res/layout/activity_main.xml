@@ -60,7 +60,7 @@
                 android:id="@+id/texpTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TOTAL EXPENSE"
+                android:text="THIS WEEK'S EXPENSE"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -71,15 +71,41 @@
                 app:layout_constraintVertical_bias="0.34" />
 
             <TextView
+                android:id="@+id/numberSign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="₱"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.64"/>
+
+            <TextView
                 android:id="@+id/wbudgetTv"
                 android:layout_width="wrap_content"
                 android:layout_height="17dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="25dp"
                 android:text="1000.00"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.64" />
+
+            <TextView
+                android:id="@+id/numberSign2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₱"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/expTv"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.64" />
 
