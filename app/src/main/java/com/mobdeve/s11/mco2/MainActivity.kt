@@ -139,7 +139,7 @@ class MainActivity : ComponentActivity() {
         dbref.child("wbudget").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val weeklyBudget = snapshot.getValue(Double::class.java) ?: 0.00
-                wbudgetTv.text = weeklyBudget.toString()  // Update the TextView with the budget value
+                wbudgetTv.text = String.format("%.2f", weeklyBudget)  // Update the TextView with the budget value
                 updateBudgetDisplay()
             }
 
