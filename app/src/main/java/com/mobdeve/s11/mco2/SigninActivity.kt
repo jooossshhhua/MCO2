@@ -50,33 +50,43 @@ class SigninActivity : ComponentActivity() {
             val email = signuserTv.text.toString()
             val password = signpassTv.text.toString()
 
-            if(email.isBlank() || password.isBlank())
-                Toast.makeText(this, "Text field is empty", Toast.LENGTH_SHORT).show()
+            try{
+                if(email.isBlank() || password.isBlank())
+                    Toast.makeText(this, "Text field is empty", Toast.LENGTH_SHORT).show()
 
-            auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        //val user = auth.currentUser
-                        Toast.makeText(
-                            baseContext,
-                            "Log-in Successful!",
-                            Toast.LENGTH_SHORT,
-                        ).show()
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            //val user = auth.currentUser
+                            Toast.makeText(
+                                baseContext,
+                                "Log-in Successful!",
+                                Toast.LENGTH_SHORT,
+                            ).show()
 
-                        val i = Intent(this, MainActivity::class.java)
-                        startActivity(i)
-                        finish()
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Toast.makeText(
-                            baseContext,
-                            "Log-in Failed.",
-                            Toast.LENGTH_SHORT,
-                        ).show()
+                            val i = Intent(this, MainActivity::class.java)
+                            startActivity(i)
+                            finish()
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(
+                                baseContext,
+                                "Log-in Failed.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
 
+                        }
                     }
-                }
+            }
+            catch (e: Exception){
+                Toast.makeText(
+                    this,
+                    "An error occurred: ${e.message}",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+
 
         }
 

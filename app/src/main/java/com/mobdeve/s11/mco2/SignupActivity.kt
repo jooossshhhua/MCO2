@@ -59,55 +59,63 @@ class SignupActivity: ComponentActivity() {
             val password = signuppassTv.text.toString()
             val confirmpassword = signupconfirmTv.text.toString()
 
-            if(username.isBlank() || email.isBlank() || password.isBlank() || confirmpassword.isBlank())
-                Toast.makeText(this, "Text field is empty", Toast.LENGTH_SHORT).show()
+            try {
+                if(username.isBlank() || email.isBlank() || password.isBlank() || confirmpassword.isBlank())
+                    Toast.makeText(this, "Text field is empty", Toast.LENGTH_SHORT).show()
 
-            if(password != confirmpassword)
-                Toast.makeText(this, "Make sure the password matches", Toast.LENGTH_SHORT).show()
+                if(password != confirmpassword)
+                    Toast.makeText(this, "Make sure the password matches", Toast.LENGTH_SHORT).show()
 
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        val user = auth.currentUser
-                        val userId = user?.uid
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            val user = auth.currentUser
+                            val userId = user?.uid
 
-                        if (userId != null) {
-                            val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
-                            val userMap = mapOf(
-                                "username" to username,
-                                "email" to email
-                            )
+                            if (userId != null) {
+                                val databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId)
+                                val userMap = mapOf(
+                                    "username" to username,
+                                    "email" to email
+                                )
 
-                            databaseReference.setValue(userMap).addOnCompleteListener { dbTask ->
-                                if (dbTask.isSuccessful) {
-                                    Toast.makeText(
-                                        baseContext,
-                                        "Account created.",
-                                        Toast.LENGTH_SHORT,
-                                    ).show()
-                                } else {
-                                    Toast.makeText(
-                                        baseContext,
-                                        "Failed to save username.",
-                                        Toast.LENGTH_SHORT,
-                                    ).show()
+                                databaseReference.setValue(userMap).addOnCompleteListener { dbTask ->
+                                    if (dbTask.isSuccessful) {
+                                        Toast.makeText(
+                                            baseContext,
+                                            "Account created.",
+                                            Toast.LENGTH_SHORT,
+                                        ).show()
+                                    } else {
+                                        Toast.makeText(
+                                            baseContext,
+                                            "Failed to save username.",
+                                            Toast.LENGTH_SHORT,
+                                        ).show()
+                                    }
                                 }
+                            } else {
+                                Toast.makeText(
+                                    baseContext,
+                                    "User ID is null.",
+                                    Toast.LENGTH_SHORT,
+                                ).show()
                             }
                         } else {
                             Toast.makeText(
                                 baseContext,
-                                "User ID is null.",
+                                "Account creation failed.",
                                 Toast.LENGTH_SHORT,
                             ).show()
                         }
-                    } else {
-                        Toast.makeText(
-                            baseContext,
-                            "Account creation failed.",
-                            Toast.LENGTH_SHORT,
-                        ).show()
                     }
-                }
+            }catch (e: Exception){
+                Toast.makeText(
+                    this,
+                    "An error occurred: ${e.message}",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
         }
 
     }
